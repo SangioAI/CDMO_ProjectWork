@@ -4,7 +4,7 @@ WORKDIR exam/
 #COPY . .
 
 RUN apt-get update
-RUN apt-get install -y z3 minizinc
+RUN apt-get install -y python3 z3 minizinc
 
 # useless for exam
 RUN apt-get install -y git
