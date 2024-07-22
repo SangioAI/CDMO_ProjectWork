@@ -1,7 +1,10 @@
 # CDMO_ProjectWork
 
-## build command
+## Build Docker command
 docker build . -f Dockerfile -t cdmo:exam
 
-## run command
+## Run Docker command
 docker run --rm -v "$(pwd)":/exam -it cdmo:exam
+
+## Convert .dat files into .dzn files
+python inst_converter.py
