@@ -18,6 +18,10 @@ array[COURIERS] of var int: loads;  % Load carried by each courier
 constraint forall(k in 1..m) (y[k,n+1] = 1);
 % Assignment: first and last x are set to origin -> loop guranteed
 constraint forall(k in 1..m) (x[k, 1] = n+1 /\ x[k, n+1] = n+1);
+% Assignment: populate distances with sum of selected items
+constraint forall(k in 1..m) (
+  d[k] = sum(j in 1..n) (D[x[k, j], x[k, j+1]]) % NOTE: loop from 1..n to avoid out-of-array indexing by j+1
+);
 
 % constraint: only one item per y column -> only one courier per item
 constraint forall(j in 1..n) (sum(k in 1..m) (y[k, j]) = 1);
@@ -27,11 +31,6 @@ constraint forall(k in 1..m) (loads[k] = sum(j in 1..n) (s[j] * y[k, j]) /\ load
 constraint forall (k in 1..m, j in ITEMS) (x[k,j]!=0 <-> y[k,x[k,j]]=1);
 % constraint: numb. of distinct values in x must be equal to the number of 1s in y
 constraint forall (k in 1..m) (fzn_nvalue(sum(j in 1..n+1)(y[k, j]), row(x,k)));
-% constraint: populate distances with sum of selected items
-constraint forall(k in 1..m) (
-  d[k] = sum(j in 1..n) (D[x[k, j], x[k, j+1]]) % NOTE: loop from 1..n cause last j+1 item is always origin
-);
-
 
 % Objective
 var int: max_distance = max(k in 1..m)(d[k]);
