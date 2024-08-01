@@ -1,6 +1,9 @@
 {
     "openFiles": [
-        "multiple_couriers_planning.mzn"
+        "multiple_couriers_planning.mzn",
+        "multiple_couriers_planning_v2.mzn",
+        "../Instances_dzn/inst01.dzn",
+        "../Instances_dzn/inst02.dzn"
     ],
     "openTab": 0,
     "projectFiles": [
@@ -25,7 +28,8 @@
         "../Instances_dzn/inst19.dzn",
         "../Instances_dzn/inst20.dzn",
         "../Instances_dzn/inst21.dzn",
-        "multiple_couriers_planning.mzn"
+        "multiple_couriers_planning.mzn",
+        "multiple_couriers_planning_v2.mzn"
     ],
     "selectedBuiltinConfigId": "org.gecode.gecode",
     "selectedBuiltinConfigVersion": "6.3.0",
