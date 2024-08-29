@@ -1,16 +1,38 @@
 # CDMO_ProjectWork
+This project 
 
-## Build Docker command
-docker build . -f Dockerfile -t cdmo:exam
+## Using Docker
+Follow the step below to use Docker.
+### Install Docker
+Follow the installation step here: https://www.docker.com/products/docker-desktop/
 
-## Run Docker command
-docker run --rm -v "$(pwd)":/exam -it cdmo:exam
+### Build Docker command
+Build the image of the docker:
+`docker build . -f Dockerfile -t cdmo_mcp`
 
-## Commit Docker changes
-docker commit -m "commit_message" CONTAINER_ID cdmo:exam
+### Run Docker command
+To directly run all the solvers on all the instances:
+`docker run -it cdmo_mcp`
 
-## Retrieve Docker running container Id
-docker container ls
+### Run Bash Docker command
+To open an interactive shell:
+`docker run --rm -it cdmo_examm /bin/bash`
 
-## Convert .dat files into .dzn files
-python inst_converter.py
+
+## Python
+Python in docker via venv
+
+## CP
+To run CP solver you can either:
+- run all configurations on all istances:
+`python solver.py -A -g -t 300`
+
+- run all configurations on specific instances:
+`python solver.py -A -g -t 300 -n 12`
+
+- run specific configurations on specific instances:
+`python solver.py -mzn "CP/mcp_3R.mzn" -heu -g -t 300 -n 12`
+
+## Solution check
+To check if a solution is consistent with problem data use:
+`python check_solution.py Instances/ Output/`

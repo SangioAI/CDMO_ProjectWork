@@ -1,0 +1,8 @@
+setuptools
+minizinc
+numpy
+scikit-learn
+matplotlib
+z3
+z3_solver
+mip

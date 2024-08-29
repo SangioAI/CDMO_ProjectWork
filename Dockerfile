@@ -1,10 +1,16 @@
 FROM minizinc/minizinc:latest
 
-WORKDIR exam/
-#COPY . .
+WORKDIR ./CDMO_Sangiorgi_Fossa
+
+COPY . .
 
 RUN apt-get update
-RUN apt-get install -y python3 z3 minizinc
+RUN apt-get install -y python3.10
+RUN apt-get install -y python3-pip
+RUN apt-get install libffi-dev
+RUN apt-get install -y python3-venv
+RUN python3 -m venv venv1
+RUN venv1/bin/python3 -m pip install -r requirements.txt
+RUN apt-get install -y z3
 
-# useless for exam
-RUN apt-get install -y git
+CMD venv1/bin/python3 CP/solver.py -A -g
