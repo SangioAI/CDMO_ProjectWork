@@ -11,6 +11,7 @@ import argparse
 MZN_FILE = "CP/mcp.mzn"
 MZN_2R_FILE = "CP/mcp_2R.mzn"
 MZN_3R_FILE = "CP/mcp_3R.mzn"
+MZN_D_FILE = "CP/mcp_D.mzn"
 CP_SOLVERS = ["gecode", "chuffed"]
 SYM_STRING = "_symbreak"
 HEU_STRING = "_heuristics"
@@ -61,6 +62,8 @@ def main():
         j_out = solve(MZN_2R_FILE, fileNames, outfileNames, noRed=False, noSym=False, solvers=CP_SOLVERS, timeout=args.timeout, heuristics=True, graph=args.graph, outImageNames=outImageNames, addName="_2R")
         for i in range(len(json_outputs)): appendJson(j_out[i], json_outputs[i]) 
         j_out = solve(MZN_3R_FILE, fileNames, outfileNames, noRed=False, noSym=False, solvers=CP_SOLVERS, timeout=args.timeout, heuristics=True, graph=args.graph, outImageNames=outImageNames, addName="_3R")
+        for i in range(len(json_outputs)): appendJson(j_out[i], json_outputs[i]) 
+        j_out = solve(MZN_D_FILE, fileNames, outfileNames, noRed=False, noSym=False, solvers=["chuffed"], timeout=args.timeout, heuristics=True, graph=args.graph, outImageNames=outImageNames, addName="_D")
         for i in range(len(json_outputs)): appendJson(j_out[i], json_outputs[i]) 
     else:
         json_outputs = solve(args.mzn_file, fileNames, outfileNames, 
@@ -120,13 +123,16 @@ def solve(mzn_file, data_files, output_files, solvers=["gecode"], noSym=False, n
                 print("Start Solving...")
                 output_dict = getOutput(None, None, timeout)
                 try:
+                    start_time = tm.time()
                     result = mzn_instance.solve(timeout=t.timedelta(seconds=timeout), random_seed=42, processes=1, optimisation_level=1, statistics=True)
+                    end_time = tm.time()
+                    time = end_time-start_time
 
-                    print(result.solution, result.status)
+                    print(result.solution, result.statistics, result.status)
                     paths = successor2paths(result["successor"], m, n)
                     paths = paths[np.argsort(l_idx)] # restore correct order of solution
                     output_dict = getOutput(result, paths, timeout)
-                    print("...End Solving in {time:1.3f}s".format(time=result.statistics['solveTime'].total_seconds()))
+                    print("...End Solving in {time:1.3f}s".format(time=time))
                     print(f"Paths:{paths}")
                     print(f"Obj:{result['max_distance']}")
                     if graph:

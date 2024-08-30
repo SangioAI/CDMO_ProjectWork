@@ -122,9 +122,12 @@ def getOutput(result, paths, timeout):
     elif result.status is mzn.Status.UNSATISFIABLE:
         time = result.statistics['solveTime'].total_seconds(), 
         obj= "UNSAT", 
-    elif result.status is mzn.Status.SATISFIED or result.status is mzn.Status.OPTIMAL_SOLUTION:
+    elif result.status is mzn.Status.SATISFIED:
+        obj = result["max_distance"]
+        sol = [[int(i) for i in path[1:-1]] for path in paths]
+    elif result.status is mzn.Status.OPTIMAL_SOLUTION:
         time = result.statistics['solveTime'].total_seconds() if result.statistics['solveTime'].total_seconds() < timeout else timeout
-        optimal = (time < timeout) and (result.status is mzn.Status.OPTIMAL_SOLUTION)
+        optimal=True
         obj = result["max_distance"]
         sol = [[int(i) for i in path[1:-1]] for path in paths]
 
