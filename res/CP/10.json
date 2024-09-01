@@ -1,0 +1,62 @@
+{
+  "gecode": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11], [9], [4, 13], [5]]
+  },
+  "chuffed": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11, 13], [9], [4], [5]]
+  },
+  "gecode_symbreak": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11], [9], [4, 13], [5]]
+  },
+  "chuffed_symbreak": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11, 13], [9], [4], [5]]
+  },
+  "gecode_symbreak_heuristics": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11], [9], [4, 13], [5]]
+  },
+  "chuffed_symbreak_heuristics": {
+    "time": 2,
+    "optimal": true,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11, 13], [9], [4], [5]]
+  },
+  "gecode_2R_symbreak_heuristics": {
+    "time": 300,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11], [9], [4, 13], [5]]
+  },
+  "chuffed_2R_symbreak_heuristics": {
+    "time": 0,
+    "optimal": true,
+    "obj": 244,
+    "sol": [[13, 10], [9], [3], [12], [2], [7], [1], [11], [4, 8], [6, 5]]
+  },
+  "chuffed_D_symbreak_heuristics": {
+    "time": 2,
+    "optimal": true,
+    "obj": 244,
+    "sol": [[8], [7], [3], [10], [2, 12], [6], [1, 11, 13], [9], [4], [5]]
+  },
+  "gecode_3R_symbreak_heuristics": {
+    "time": 299,
+    "optimal": false,
+    "obj": 244,
+    "sol": [[8], [7, 13], [3], [10], [2, 12], [6], [1, 11], [9], [4], [5]]
+  }
+}

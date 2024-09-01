@@ -17,7 +17,7 @@ CP_SOLVERS = ["gecode", "chuffed"]
 SYM_STRING = "_symbreak"
 HEU_STRING = "_heuristics"
 INSTANCES_PATH = "./Instances/"
-OUTPUT_PATH = "./Output/CP/"
+OUTPUT_PATH = "./res/CP/"
 OUTPUT_IMAGES_PATH = "./Output_Images/CP/"
 
 def main():
