@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from sklearn import manifold
 import minizinc as mzn
+import datetime as t
 
 def readInst(pathToFile):
     with open(pathToFile,"r") as file:
@@ -28,48 +29,81 @@ def lowerBound(D):
     ''' Lower Bound is just the minumum path traveled by one courier visiting only one item'''
     return np.min([D[-1,i]+D[i,-1] for i in range(D.shape[1]-1)])
     
+def upperBound3(D,m,partition):
+    ubs = []
+    for k in range(m):
+        idxs = np.argwhere(partition==k+1)[:,0]
+        if len(idxs) == 0:
+            ubs += []
+            continue
+        # print(f"idxs:{list(idxs)}")
+        D_max = D[:,idxs][idxs,:].copy()
+        D_max[D_max==0] = 1000 # avoid looping on itself
+        min_route = [-1] # start from depot
+        for i in range(len(idxs)):
+            min_route += [np.argmin(D_max[min_route[-1],:])]
+            D_max[:,min_route[1:len(min_route)]] = 1000
+        # print(f"before {min_route}")
+        for i in range(1,len(min_route)):
+            min_route[i] = idxs[min_route[i]]
+        min_route = min_route[1:] # remove starting depot
+        # print(f"after {min_route}")
+        _ub = D[-1,min_route[0]] 
+        _ubs = [_ub]
+        # print(f"[{-1}{min_route[0]}]:{D[-1,min_route[0]] }->{_ub}")
+        for i in range(len(min_route)-1):
+            _ub += D[min_route[i],min_route[i+1]] 
+            _ubs += [_ub]
+            # print(f"[{i}{min_route[i+1]}]:{D[-1,min_route[0]] }->{_ub}")
+        _ub += D[min_route[-1],-1]
+        _ubs += [_ub]
+        # print(f"dist:{_ubs}")
+        # print(f"[{i}{min_route[i+1]}]:{D[-1,min_route[0]] }->{_ub}")
+        ubs += [_ub]
+    # print(ubs)
+    return np.max(ubs)
 
-def upperBound(D, loads, sizes):
-    ''' This is an heuristic. Upper Bound is the greedy (so not the real mininum) min distance 
-    needed for one courier to reach all items.'''
-    max_route = [-1] # start from depot
-    D_max = D.copy()
-    D_max[D_max==0] = 1000 # avoid looping on itself
-    l = 0
-    k = 0
-    ub = 0
-    for i in range(D.shape[0]-1): # -1 cause we don't count going back home
-        max_route += [np.argmin(D_max[max_route[-1],:-1])] # :-1 to avoid going back depot
-        D_max[:,max_route[1:len(max_route)]] = 1000
-        while k<len(loads) and l + sizes[max_route[-1]] > loads[k]:
-            print(f"full courier {k} at {ub} with l= {l}")
-            if l!=0:
-                ub += D[max_route[-1],-1] # add going back home - do it once
-            l = 0
-            k += 1
-        ub += D[max_route[-2],max_route[-1]]
-        l += sizes[max_route[-1]]
-        # print(max_route)
-        # print(D_max)
-    ub += D[max_route[-1],-1] # add going home
-    return ub
-
-# def upperBound(D, loads):
+# def upperBound(D, loads, sizes):
 #     ''' This is an heuristic. Upper Bound is the greedy (so not the real mininum) min distance 
 #     needed for one courier to reach all items.'''
-#     max_route = [-1]
+#     max_route = [-1] # start from depot
 #     D_max = D.copy()
-#     D_max[D_max==0] = 1000
+#     D_max[D_max==0] = 1000 # avoid looping on itself
+#     l = 0
+#     k = 0
+#     ub = 0
 #     for i in range(D.shape[0]-1): # -1 cause we don't count going back home
 #         max_route += [np.argmin(D_max[max_route[-1],:-1])] # :-1 to avoid going back depot
 #         D_max[:,max_route[1:len(max_route)]] = 1000
+#         while k<len(loads) and l + sizes[max_route[-1]] > loads[k]:
+#             # print(f"full courier {k} at {ub} with l= {l}")
+#             if l!=0:
+#                 ub += D[max_route[-1],-1] # add going back home - do it once
+#             l = 0
+#             k += 1
+#         ub += D[max_route[-2],max_route[-1]]
+#         l += sizes[max_route[-1]]
 #         # print(max_route)
 #         # print(D_max)
-#     # calculate distance of max_route
-#     ub = D[max_route[-1],-1] # circuit
-#     for i in range(len(max_route)-1):
-#         ub += D[max_route[i],max_route[i+1]]
+#     ub += D[max_route[-1],-1] # add going home
 #     return ub
+
+def upperBound(D, loads):
+    ''' This is an heuristic. Upper Bound is the greedy (so not the real mininum) min distance 
+    needed for one courier to reach all items.'''
+    max_route = [-1]
+    D_max = D.copy()
+    D_max[D_max==0] = 1000
+    for i in range(D.shape[0]-1): # -1 cause we don't count going back home
+        max_route += [np.argmin(D_max[max_route[-1],:-1])] # :-1 to avoid going back depot
+        D_max[:,max_route[1:len(max_route)]] = 1000
+        # print(max_route)
+        # print(D_max)
+    # calculate distance of max_route
+    ub = D[max_route[-1],-1] # circuit
+    for i in range(len(max_route)-1):
+        ub += D[max_route[i],max_route[i+1]]
+    return ub
 
 def makeSymmetric(D):
     ltri_mask = ~np.tri(D.shape[0],D.shape[1],-1).astype(bool)
@@ -152,3 +186,12 @@ def heuristic1(loads, sizes):
 def appendJson(jsonFrom, jsonTo):
     for i in jsonFrom: 
         jsonTo[i]=jsonFrom[i]
+
+def preprocess(mzn_instance, m,n,l,s):
+    mzn_instance["m"] = m
+    mzn_instance["n"] = n
+    mzn_instance["l"] = l
+    mzn_instance["s"] = s
+    result = mzn_instance.solve(timeout=t.timedelta(seconds=5), random_seed=42, processes=1, optimisation_level=1, statistics=True)
+    # print(result.solution, result.statistics, result.status)
+    return np.array(result["bins"])
