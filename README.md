@@ -67,9 +67,45 @@ Available CP models are:
 - `CP/mcp_D.mzn`: base model with Decomposition
 
 ## SAT solver
+To run SAT solver (`SAT/solver.py`) accept the following arguments (listed by: `python SAT/solver.py -h`):
+```
+usage: solver.py [-h] [-A] [-nosym] [-l] [-s] [-b] [-part] [-u] [-o OUTPUT_DIR] [-i INPUT_DIR] [-n NUM_INSTANCE] [-m]
 
+optional arguments:
+  -h, --help            show this help message and exit
+  -A, --run_all         Run all solvers and modalities at once
+  -nosym, --no_symmetries
+                        Use no symmetries breaking constraints
+  -l, --linear          Linear search
+  -s, --std             Sequential model
+  -b, --binary          Binary search
+  -part, --partition    Use solver-based Partitioner to find a better UpperBound in the pre-processing step
+  -u, --upper           Use simple and common upper bound
+  -o OUTPUT_DIR, --output_dir OUTPUT_DIR
+                        Directory where the output will be saved
+  -i INPUT_DIR, --input_dir INPUT_DIR
+                        Directory where the instance txt files can be found
+  -n NUM_INSTANCE, --num_instance NUM_INSTANCE
+                        Select the instance that you want to solve, default = 0 solve all
+  -m, --main_models     Run just best models
+```
 ## MIP solver
+To run MIP solver (`MIP/solver.py`) accept the following arguments (listed by: `python MIP/solver.py -h`):
+```
+usage: solver.py [-h] [-A] [-n NUM_INSTANCE] [-m MODEL] [-i INPUT_DIR] [-o OUTPUT_DIR]
 
+optional arguments:
+  -h, --help            show this help message and exit
+  -A, --run_all         Run all solvers and modalities at once
+  -n NUM_INSTANCE, --num_instance NUM_INSTANCE
+                        Select the instance that you want to solve, default = 0 solve all
+  -m MODEL, --model MODEL
+                        Decide the model
+  -i INPUT_DIR, --input_dir INPUT_DIR
+                        Directory where the instance txt files can be found
+  -o OUTPUT_DIR, --output_dir OUTPUT_DIR
+                        Directory where the output will be saved
+```
 ## Solution Checker Usage
 To check if a solution is consistent with problem data use:
 `python check_solution.py Instances/ Output/`
