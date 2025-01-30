@@ -1,4 +1,6 @@
 # CDMO_ProjectWork
+Combinatorial Decision Making and Optimization project of the Artificial Intelligence course of study at the University of Bologna.
+
 This project contains different approaches to solve the Multiple Courier Planning problem (MCP) using Constraint Programming (CP), SAT and Mixed-Integer Programming (MIP) strategies. The results of different optimization approaches exploiting different formulations and underling solvers are discussed in the pdf report.
 
 ## Docker Usage
